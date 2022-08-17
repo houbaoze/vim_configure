@@ -1,27 +1,26 @@
 call plug#begin('~/.vim/plugged')
 
  Plug 'scrooloose/nerdtree'
- Plug 'mhinz/vim-startify' 
- " Plug 'tpope/vim-fugitive' 
+ Plug 'mhinz/vim-startify'
+ " Plug 'tpope/vim-fugitive'
  Plug 'lfv89/vim-interestingwords' " Highlight with <Leader>k
  Plug 'vim-scripts/DoxygenToolkit.vim'
- 
- Plug 'octol/vim-cpp-enhanced-highlight'
+ " Plug 'octol/vim-cpp-enhanced-highlight'
  Plug 'Yggdroot/indentLine'
  Plug 'godlygeek/tabular'
- 
+
  Plug 'vim-airline/vim-airline'
  Plug 'vim-airline/vim-airline-themes'
 
  Plug 'preservim/vim-markdown'
  Plug 'iamcco/mathjax-support-for-mkdp'
  Plug 'iamcco/markdown-preview.nvim'
- 
+
  Plug 'preservim/nerdcommenter'
 " Plug 'Yggdroot/LeaderF'
  Plug 'airblade/vim-gitgutter'
  Plug 'vim-scripts/taglist.vim'
- 
+
  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
  Plug 'junegunn/fzf.vim'
  Plug 'altercation/vim-colors-solarized'  "Vim主题插件
@@ -43,12 +42,23 @@ set softtabstop=2
 " when indenting with '>', use 2 spaces width
 set shiftwidth=2
 
+autocmd BufReadPost,BufWritePre *.h   normal gg=G ''
+autocmd BufReadPost,BufWritePre *.cpp normal gg=G ''
+autocmd BufReadPost,BufWritePre *.py  normal gg=G ''
+
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
 set syntax=on
 let mapleader = '\'
 let g:clang_complete_copen=1
 let g:clang_close_preview=0
 let g:clang_user_options='-std=c++17'
-let g:neocomplcache_enable_at_startup = 1 
+let g:neocomplcache_enable_at_startup = 1
 let g:DoxygenToolkit_authorName="houbaoze@blackvision.net"
 let g:ycm_comfirm_extra_conf=0
 let g:vim_markdown_toc_autofit = 1
@@ -60,12 +70,12 @@ set laststatus=2  "永远显示状态栏
 "let g:airline_powerline_fonts = 1  " 支持 powerline 字体
 let g:airline#extensions#tabline#enabled = 1 " 显示窗口tab和buffer
 let g:airline#extensions#tabline#formatter = 'default'
-let g:airline_theme='ouo'   
+let g:airline_theme='ouo'
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
 "
-let g:airline_section_b = '%{strftime("%c")}'
+"let g:airline_section_b = '%{strftime("%c")}'
 let g:airline_section_y = 'BN: %{bufnr("%")}'
 
 let g:airline_left_alt_sep = '❯'
@@ -129,7 +139,6 @@ let g:tagbar_autofocus=1
 "vim打开文件夹时打开文件树
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " 文件树列表显示在左侧
